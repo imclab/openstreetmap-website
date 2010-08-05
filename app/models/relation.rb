@@ -148,6 +148,69 @@ class Relation < ActiveRecord::Base
     return el1
   end 
 
+  def to_json_obj(visible_members = nil, changeset_cache = {}, user_display_name_cache = {})
+    el1 = {}
+    el1['id'] = self.id.to_s
+    el1['visible'] = self.visible.to_s
+    el1['timestamp'] = self.timestamp.xmlschema
+    el1['version'] = self.version.to_s
+    el1['changeset'] = self.changeset_id.to_s
+
+    if changeset_cache.key?(self.changeset_id)
+      # use the cache if available
+    else
+      changeset_cache[self.changeset_id] = self.changeset.user_id
+    end
+
+    user_id = changeset_cache[self.changeset_id]
+
+    if user_display_name_cache.key?(user_id)
+      # use the cache if available
+    elsif self.changeset.user.data_public?
+      user_display_name_cache[user_id] = self.changeset.user.display_name
+    else
+      user_display_name_cache[user_id] = nil
+    end
+
+    if not user_display_name_cache[user_id].nil?
+      el1['user'] = user_display_name_cache[user_id]
+      el1['uid'] = user_id.to_s
+    end
+
+    el1['member'] = []
+
+    self.relation_members.each do |member|
+      p=0
+      if visible_members
+        # if there is a list of visible members then use that to weed out deleted segments
+        if visible_members[member.member_type][member.member_id]
+          p=1
+        end
+      else
+        # otherwise, manually go to the db to check things
+        if member.member && member.member.visible?
+          p=1
+        end
+      end
+      if p
+        e = {}
+        e['type'] = member.member_type.downcase
+        e['ref'] = member.member_id.to_s 
+        e['role'] = member.member_role
+        el1['member'] << e
+       end
+    end
+
+  	el1['tag'] = []
+    self.relation_tags.each do |tag|
+      e = {}
+      e['k'] = tag.k
+      e['v'] = tag.v
+      el1['tag'] << e
+    end
+    return el1
+  end 
+
   def self.find_for_nodes(ids, options = {})
     if ids.empty?
       return []

@@ -234,6 +234,48 @@ class Node < ActiveRecord::Base
     return el1
   end
 
+  def to_json_obj(changeset_cache = {}, user_display_name_cache = {})
+    el1 = {}
+    el1['id'] = self.id.to_s
+    el1['lat'] = self.lat.to_s
+    el1['lon'] = self.lon.to_s
+    el1['version'] = self.version.to_s
+    el1['changeset'] = self.changeset_id.to_s
+
+    if changeset_cache.key?(self.changeset_id)
+      # use the cache if available
+    else
+      changeset_cache[self.changeset_id] = self.changeset.user_id
+    end
+
+    user_id = changeset_cache[self.changeset_id]
+
+    if user_display_name_cache.key?(user_id)
+      # use the cache if available
+    elsif self.changeset.user.data_public?
+      user_display_name_cache[user_id] = self.changeset.user.display_name
+    else
+      user_display_name_cache[user_id] = nil
+    end
+
+    if not user_display_name_cache[user_id].nil?
+      el1['user'] = user_display_name_cache[user_id]
+      el1['uid'] = user_id.to_s
+    end
+
+	el1['tag'] = []
+    self.tags.each do |k,v|
+      el2 = {}
+      el2['k'] = k.to_s
+      el2['v'] = v.to_s
+      el1['tag'] << el2
+    end
+
+    el1['visible'] = self.visible.to_s
+    el1['timestamp'] = self.timestamp.xmlschema
+    return el1
+  end
+
   def tags_as_hash
     return tags
   end

@@ -42,6 +42,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect "api/#{API_VERSION}/relation/:id", :controller => 'relation', :action => 'delete', :id => /\d+/, :conditions => { :method => :delete }
   map.connect "api/#{API_VERSION}/relations", :controller => 'relation', :action => 'relations', :id => nil
 
+  map.connect "api/#{API_VERSION}/geohash/:geohash.:format", :controller => 'api', :action => 'geohash'
+  map.connect "api/#{API_VERSION}/geohash/:geohash", :controller => 'api', :action => 'geohash'
+
+  map.connect "api/#{API_VERSION}/map.:format", :controller => 'api', :action => 'map'
   map.connect "api/#{API_VERSION}/map", :controller => 'api', :action => 'map'
   
   map.connect "api/#{API_VERSION}/trackpoints", :controller => 'api', :action => 'trackpoints'

@@ -61,6 +61,7 @@ Rails::Initializer.run do |config|
   config.gem 'httpclient'
   config.gem 'SystemTimer', :version => '>= 1.1.3', :lib => 'system_timer'
   config.gem 'sanitize'
+  config.gem "davetroy-geohash", :source => "http://gems.github.com"
 
   # Only load the plugins named here, in the order given. By default, all plugins
   # in vendor/plugins are loaded in alphabetical order.

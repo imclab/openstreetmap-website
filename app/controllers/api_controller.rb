@@ -200,7 +200,11 @@ class ApiController < ApplicationController
 
     @nodes.each do |node|
       if node.visible?
-        doc.root << node.to_xml_node(changeset_cache, user_display_name_cache)
+        if params[:format] == 'json'
+          doc['node'] << node.to_json_obj
+        else
+          doc.root << node.to_xml_node(changeset_cache, user_display_name_cache)
+        end
         visible_nodes[node.id] = node
       end
     end
@@ -208,7 +212,11 @@ class ApiController < ApplicationController
     way_ids = Array.new
     ways.each do |way|
       if way.visible?
-        doc.root << way.to_xml_node(visible_nodes, changeset_cache, user_display_name_cache)
+        if params[:format] == 'json'
+          doc['way'] << way.to_json_obj
+        else
+          doc.root << way.to_xml_node(visible_nodes, changeset_cache, user_display_name_cache)
+        end
         way_ids << way.id
       end
     end 
@@ -226,12 +234,29 @@ class ApiController < ApplicationController
     # this "uniq" may be slightly inefficient; it may be better to first collect and output
     # all node-related relations, then find the *not yet covered* way-related ones etc.
     relations.uniq.each do |relation|
-      doc.root << relation.to_xml_node(nil, changeset_cache, user_display_name_cache)
+      if params[:format] == 'json'
+        doc['relation'] << relation.to_json_obj(nil, changeset_cache, user_display_name_cache)
+      else
+        doc.root << relation.to_xml_node(nil, changeset_cache, user_display_name_cache)
+      end
     end
 
-    response.headers["Content-Disposition"] = "attachment; filename=\"map.osm\""
+    if params[:geohash]
+      response.headers["Content-Disposition"] = "attachment; filename=\""+params[:geohash]+"."+params[:format]+"\""
+    else
+      response.headers["Content-Disposition"] = "attachment; filename=\"map."+params[:format]+"\""    
+    end
 
-    render :text => doc.to_s, :content_type => "text/xml"
+    respond_to do |format|
+      format.xml  { render :text => doc.to_s, :content_type => "text/xml" }
+      format.json  { render :json => {'osm' => doc} }
+    end
+  end
+
+  def geohash
+    _bbox = GeoHash.decode_bbox(params[:geohash])
+    params['bbox'] = _bbox[0][1].to_s+','+_bbox[0][0].to_s+','+_bbox[1][1].to_s+','+_bbox[1][0].to_s
+    map
   end
 
   # Get a list of the tiles that have changed within a specified time
