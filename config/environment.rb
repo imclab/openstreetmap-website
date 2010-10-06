@@ -2,13 +2,13 @@
 
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
-ENV['RAILS_ENV'] ||= 'production'
+ENV['RAILS_ENV'] ||= 'development'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
 # Set the server URL
-SERVER_URL = ENV['OSM_SERVER_URL'] || 'www.openstreetmap.org'
+SERVER_URL = ENV['OSM_SERVER_URL'] || 'planet.cartagen.org'
 
 # Set the generator
 GENERATOR = ENV['OSM_SERVER_GENERATOR'] || 'OpenStreetMap server'
@@ -61,7 +61,7 @@ Rails::Initializer.run do |config|
   config.gem 'httpclient'
   config.gem 'SystemTimer', :version => '>= 1.1.3', :lib => 'system_timer'
   config.gem 'sanitize'
-  config.gem "davetroy-geohash", :source => "http://gems.github.com"
+  config.gem "davetroy-geohash", :lib => 'geohash', :source => "http://gems.github.com"
 
   # Only load the plugins named here, in the order given. By default, all plugins
   # in vendor/plugins are loaded in alphabetical order.
