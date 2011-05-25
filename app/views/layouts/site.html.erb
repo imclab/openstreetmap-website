@@ -5,6 +5,7 @@
     <%= javascript_strings %>
     <%= javascript_include_tag 'prototype' %>
     <%= javascript_include_tag 'site' %>
+    <%= javascript_include_tag 'menu' %>
     <!--[if lt IE 7]><%= javascript_include_tag 'pngfix' %><![endif]--> <!-- thanks, microsoft! -->
     <%= stylesheet_link_tag 'common' %>
     <!--[if IE]><%= stylesheet_link_tag 'large', :media => "screen" %><![endif]--> <!-- IE is totally broken with CSS media queries -->
@@ -68,10 +69,22 @@
         <% else %>
         <li><%= link_to t('layouts.export'), {:controller => 'site', :action => 'export'}, {:id => 'exportanchor', :title => t('layouts.export_tooltip'), :class => exportclass} %></li>
         <% end %>
-        <li><%= link_to t('layouts.gps_traces'), {:controller => 'trace', :action => 'list'}, {:id => 'traceanchor', :title => t('layouts.gps_traces_tooltip'), :class => traceclass} %></li>
+        <li><%= link_to t('layouts.gps_traces'), {:controller => 'trace', :action => 'list', :display_name => nil}, {:id => 'traceanchor', :title => t('layouts.gps_traces_tooltip'), :class => traceclass} %></li>
         <li><%= link_to t('layouts.user_diaries'), {:controller => 'diary_entry', :action => 'list', :display_name => nil}, {:id => 'diaryanchor', :title => t('layouts.user_diaries_tooltip'), :class => diaryclass} %></li>
       </ul>
     </div>
+
+    <div id="editmenu">
+      <ul>
+        <% Editors::ALL_EDITORS.each do |editor| %>
+          <li><%= link_to t('layouts.edit_with', :editor => t("editor.#{editor}.description")), {:controller => 'site', :action => 'edit', :editor => editor}, {:id => editor + 'anchor'} %></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <script type="text/javascript">
+      createMenu("editanchor", "editmenu", 1000);
+    </script>
 
     <div id="left">
 
@@ -100,11 +113,11 @@
       </div>
       <% end %>
 
-      <% if OSM_STATUS == :database_offline or OSM_STATUS == :api_offline %>
+      <% if STATUS == :database_offline or STATUS == :api_offline %>
       <div id="alert">
         <%= t 'layouts.osm_offline' %>
       </div>
-      <% elsif OSM_STATUS == :database_readonly or OSM_STATUS == :api_readonly %>
+      <% elsif STATUS == :database_readonly or STATUS == :api_readonly %>
       <div id="alert">
         <%= t 'layouts.osm_read_only' %>
       </div>
@@ -117,11 +130,14 @@
       <% end %>
 
       <div id="left_menu" class="left_menu">
-        <a href="<%= t 'layouts.help_wiki_url' %>" title="<%= t 'layouts.help_wiki_tooltip' %>"><%= t 'layouts.help_wiki' %></a><br />
-        <%= link_to t('layouts.copyright'), {:controller => 'site', :action => 'copyright'} %><br />
-        <a href="http://blogs.openstreetmap.org/" title="<%= t 'layouts.news_blog_tooltip' %>"><%= t 'layouts.news_blog' %></a><br />
-        <a href="<%= t 'layouts.shop_url' %>" title="<%= t 'layouts.shop_tooltip' %>"><%= t 'layouts.shop' %></a><br />
-        <%= yield :left_menu %>
+        <ul>
+          <li><%= link_to(t('layouts.help_centre'), t('layouts.help_url'), :title => t('layouts.help_title')) %></li>
+          <li><%= link_to(t('layouts.documentation'), t('layouts.wiki_url'), :title => t('layouts.documentation_title')) %></li>
+          <li><%= link_to t('layouts.copyright'), {:controller => 'site', :action => 'copyright'} %></li>
+          <li><a href="http://blogs.openstreetmap.org/" title="<%= t 'layouts.community_blogs_title' %>"><%= t 'layouts.community_blogs' %></a></li>
+          <li><a href="http://www.osmfoundation.org" title="<%= t 'layouts.foundation_title' %>"><%= t 'layouts.foundation' %></a></li>
+          <%= yield :left_menu %>
+        </ul>
       </div>
 
       <%= yield :optionals %>

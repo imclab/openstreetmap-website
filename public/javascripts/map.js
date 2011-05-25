@@ -23,7 +23,8 @@ function createMap(divName, options) {
          new OpenLayers.Control.LayerSwitcher(),
          new OpenLayers.Control.Navigation(),
          new OpenLayers.Control.PanZoom(),
-         new OpenLayers.Control.PanZoomBar()
+         new OpenLayers.Control.PanZoomBar(),
+         new OpenLayers.Control.ScaleLine({geodesic: true})
       ],
       units: "m",
       maxResolution: 156543.0339,
@@ -242,20 +243,6 @@ function setMapLayers(layerConfig) {
 
          if (c == "B") {
             map.setBaseLayer(layers[i]);
-         }
-      }
-
-      while (layerConfig.charAt(l) == "B" || layerConfig.charAt(l) == "0") {
-         l++;
-      }
-
-      for (var layers = map.getLayersBy("isBaseLayer", false), i = 0; i < layers.length; i++) {
-         var c = layerConfig.charAt(l++);
-
-         if (c == "T") {
-            layers[i].setVisibility(true);
-         } else if(c == "F") {
-            layers[i].setVisibility(false);
          }
       }
    } else {

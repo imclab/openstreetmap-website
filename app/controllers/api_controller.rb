@@ -18,7 +18,7 @@ class ApiController < ApplicationController
         return
     end
 
-    offset = page * APP_CONFIG['tracepoints_per_page']
+    offset = page * TRACEPOINTS_PER_PAGE
 
     # Figure out the bbox
     bbox = params['bbox']
@@ -39,14 +39,14 @@ class ApiController < ApplicationController
     end
 
     # get all the points
-    points = Tracepoint.find_by_area(min_lat, min_lon, max_lat, max_lon, :offset => offset, :limit => APP_CONFIG['tracepoints_per_page'], :order => "gpx_id DESC, trackid ASC, timestamp ASC" )
+    points = Tracepoint.find_by_area(min_lat, min_lon, max_lat, max_lon, :offset => offset, :limit => TRACEPOINTS_PER_PAGE, :order => "gpx_id DESC, trackid ASC, timestamp ASC" )
 
     doc = XML::Document.new
     doc.encoding = XML::Encoding::UTF_8
     root = XML::Node.new 'gpx'
     root['version'] = '1.0'
     root['creator'] = 'OpenStreetMap.org'
-    root['xmlns'] = "http://www.topografix.com/GPX/1/0/"
+    root['xmlns'] = "http://www.topografix.com/GPX/1/0"
     
     doc.root = root
 
@@ -145,14 +145,14 @@ class ApiController < ApplicationController
     end
 
     # FIXME um why is this area using a different order for the lat/lon from above???
-    @nodes = Node.find_by_area(min_lat, min_lon, max_lat, max_lon, :conditions => {:visible => true}, :include => :node_tags, :limit => APP_CONFIG['max_number_of_nodes']+1)
+    @nodes = Node.find_by_area(min_lat, min_lon, max_lat, max_lon, :conditions => {:visible => true}, :include => :node_tags, :limit => MAX_NUMBER_OF_NODES+1)
     # get all the nodes, by tag not yet working, waiting for change from NickB
     # need to be @nodes (instance var) so tests in /spec can be performed
     #@nodes = Node.search(bbox, params[:tag])
 
     node_ids = @nodes.collect(&:id)
-    if node_ids.length > APP_CONFIG['max_number_of_nodes']
-      report_error("You requested too many nodes (limit is #{APP_CONFIG['max_number_of_nodes']}). Either request a smaller area, or use planet.osm")
+    if node_ids.length > MAX_NUMBER_OF_NODES
+      report_error("You requested too many nodes (limit is #{MAX_NUMBER_OF_NODES}). Either request a smaller area, or use planet.osm")
       return
     end
     if node_ids.length == 0
@@ -160,15 +160,28 @@ class ApiController < ApplicationController
       return
     end
 
-    doc = OSM::API.new.get_xml_doc
-
     # add bounds
-    bounds = XML::Node.new 'bounds'
+    if params[:format] == 'json'
+      bounds = {}
+    else 
+      bounds = XML::Node.new 'bounds'
+    end
     bounds['minlat'] = min_lat.to_s
     bounds['minlon'] = min_lon.to_s
     bounds['maxlat'] = max_lat.to_s
     bounds['maxlon'] = max_lon.to_s
-    doc.root << bounds
+
+    if params[:format] == 'json'
+      doc = {}
+      doc['bounds'] = bounds
+      doc['node'] = []
+      doc['way'] = []
+      doc['relation'] = []
+    else
+      doc = OSM::API.new.get_xml_doc
+      doc.root << bounds
+    end
+
 
     # get ways
     # find which ways are needed
@@ -320,19 +333,19 @@ class ApiController < ApplicationController
     version['maximum'] = "#{API_VERSION}";
     api << version
     area = XML::Node.new 'area'
-    area['maximum'] = APP_CONFIG['max_request_area'].to_s;
+    area['maximum'] = MAX_REQUEST_AREA.to_s;
     api << area
     tracepoints = XML::Node.new 'tracepoints'
-    tracepoints['per_page'] = APP_CONFIG['tracepoints_per_page'].to_s
+    tracepoints['per_page'] = TRACEPOINTS_PER_PAGE.to_s
     api << tracepoints
     waynodes = XML::Node.new 'waynodes'
-    waynodes['maximum'] = APP_CONFIG['max_number_of_way_nodes'].to_s
+    waynodes['maximum'] = MAX_NUMBER_OF_WAY_NODES.to_s
     api << waynodes
     changesets = XML::Node.new 'changesets'
     changesets['maximum_elements'] = Changeset::MAX_ELEMENTS.to_s
     api << changesets
     timeout = XML::Node.new 'timeout'
-    timeout['seconds'] = APP_CONFIG['api_timeout'].to_s
+    timeout['seconds'] = API_TIMEOUT.to_s
     api << timeout
     
     doc.root << api

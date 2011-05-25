@@ -66,9 +66,8 @@ class ApiControllerTest < ActionController::TestCase
     maxlat = point.latitude+0.001
     bbox = "#{minlon},#{minlat},#{maxlon},#{maxlat}"
     get :trackpoints, :bbox => bbox
-    #print @response.body
     assert_response :success
-    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0/]:root", :count => 1 do
+    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0]:root", :count => 1 do
       assert_select "trk" do
         assert_select "trkseg"
       end
@@ -83,9 +82,8 @@ class ApiControllerTest < ActionController::TestCase
     maxlat = point.latitude+0.002
     bbox = "#{minlon},#{minlat},#{maxlon},#{maxlat}"
     get :trackpoints, :bbox => bbox
-    #print @response.body
     assert_response :success
-    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0/]:root", :count => 1 do
+    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0]:root", :count => 1 do
       assert_select "trk", :count => 1 do
         assert_select "trk > trkseg", :count => 2 do |trksegs|
           trksegs.each do |trkseg|
@@ -106,9 +104,8 @@ class ApiControllerTest < ActionController::TestCase
     maxlat = point.latitude+0.002
     bbox = "#{minlon},#{minlat},#{maxlon},#{maxlat}"
     get :trackpoints, :bbox => bbox
-    #print @response.body
     assert_response :success
-    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0/]:root", :count => 1 do
+    assert_select "gpx[version=1.0][creator=OpenStreetMap.org][xmlns=http://www.topografix.com/GPX/1/0]:root", :count => 1 do
       assert_select "trk", :count => 1 do
         assert_select "trk>name", :count => 1
         assert_select "trk>desc", :count => 1
@@ -147,7 +144,7 @@ class ApiControllerTest < ActionController::TestCase
       [ "trackpoints", "map" ].each do |tq|
         get tq, :bbox => bbox
         assert_response :bad_request, "The bbox:#{bbox} was expected to be too big"
-        assert_equal "The maximum bbox size is #{APP_CONFIG['max_request_area']}, and your request was too large. Either request a smaller area, or use planet.osm", @response.body, "bbox: #{bbox}"
+        assert_equal "The maximum bbox size is #{MAX_REQUEST_AREA}, and your request was too large. Either request a smaller area, or use planet.osm", @response.body, "bbox: #{bbox}"
       end
     end
   end
@@ -264,8 +261,8 @@ class ApiControllerTest < ActionController::TestCase
     assert_select "osm:root[version='#{API_VERSION}'][generator='#{GENERATOR}']", :count => 1 do
       assert_select "api", :count => 1 do
         assert_select "version[minimum=#{API_VERSION}][maximum=#{API_VERSION}]", :count => 1
-        assert_select "area[maximum=#{APP_CONFIG['max_request_area']}]", :count => 1
-        assert_select "tracepoints[per_page=#{APP_CONFIG['tracepoints_per_page']}]", :count => 1
+        assert_select "area[maximum=#{MAX_REQUEST_AREA}]", :count => 1
+        assert_select "tracepoints[per_page=#{TRACEPOINTS_PER_PAGE}]", :count => 1
         assert_select "changesets[maximum_elements=#{Changeset::MAX_ELEMENTS}]", :count => 1
       end
     end

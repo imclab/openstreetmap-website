@@ -883,8 +883,6 @@ aln:
     export_tooltip: Harta dhënat Eksporti
     gps_traces: GPS Gjurmët
     gps_traces_tooltip: Manage gjurmë GPS
-    help_wiki: Ndihmë & Wiki
-    help_wiki_tooltip: Ndihmë & Wiki faqe interneti për projektin
     history: Historia
     home: shtëpi
     home_tooltip: Shkoni në shtëpi vend
@@ -908,12 +906,8 @@ aln:
     make_a_donation: 
       text: Bëni një donacion
       title: OpenStreetMap Mbështetje me një donacion monetar
-    news_blog: Lajme blog
-    news_blog_tooltip: blog Lajmet rreth OpenStreetMap, të dhëna pa pagesë gjeografike, etj
     osm_offline: Baza e të dhanave të OpenStreetMap niher për niher jasht funksioni derisa disa punë themelore po kryhen në bazën e të dhanave.
     osm_read_only: Baza e të dhënave OpenStreetMap është aktualisht në mënyrë read-only ndërsa thelbësor bazës së të dhënave mirëmbajtjen puna është kryer.
-    shop: Dyqan
-    shop_tooltip: Dyqan me mallra të markës OpenStreetMap
     sign_up: regjistrohu
     sign_up_tooltip: Krijo një llogari për përpunim
     tag_line: Free Harta Wiki Botërore
@@ -1235,7 +1229,6 @@ aln:
           unclassified: Udhë e paklasifikume
           unsurfaced: rrugë Unsurfaced
           wood: Druri
-        heading: Legjenda për z{{zoom_level}}
     search: 
       search: Kërko
       search_help: "shembuj: 'Alkmaar', 'Regent Street, Cambridge', 'CB2 5AQ', ose 'zyrat e postës pranë Lünen' <a href='http://wiki.openstreetmap.org/wiki/Search'>shembuj më shumë ...</a>"
@@ -1383,7 +1376,6 @@ aln:
       update home location on click: Ndryshoma venin kur të klikoj në hart?
     confirm: 
       button: Konfirmo
-      failure: Ni akount i shfrytzuesit me ket token veqse osht i konfirmum.
       heading: Konfirmo nje akount te shfrytezuesit
       press confirm button: Shtype butonin e konfirmimit ma posht që me mujt me aktivizue akountin e juej
       success: Akounti juaj u konfirmua, ju falemnderit për regjistrim!
@@ -1403,8 +1395,8 @@ aln:
       heading: Perdoruesit
       hide: Mshefi Perdorust e Zgjedhun
       showing: 
-        one: Tu e kallxu faqen {{page}} ({{page}} prej {{page}})
-        other: Tu e kallxu faqen {{page}} ({{page}}-{{page}} prej {{page}})
+        one: Tu e kallxu faqen {{page}} ({{first_item}} prej {{items}})
+        other: Tu e kallxu faqen {{page}} ({{first_item}}-{{last_item}} prej {{items}})
       summary: "{{name}} u kriju prej {{ip_address}} në {{date}}"
       summary_no_ip: "{{name}} u krijue me {{date}}"
       title: Perdoruesit
@@ -1491,7 +1483,6 @@ aln:
         italy: Italia
         rest_of_world: Pjesa tjetër e botës
       legale_select: "Ju lutem zgjidhni vendin tuaj të banimit:"
-      press accept button: Ju lutem lexoni marrëveshjen më poshtë dhe shtypni butonin e pranimit për të krijuar llogarinë tuaj.
     view: 
       activate_user: aktivizo kët shfrytezues
       add as friend: shtoje si shoq

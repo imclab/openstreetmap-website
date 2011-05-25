@@ -3,7 +3,9 @@
 # Export driver: syck
 # Author: Cfoucher
 # Author: Lucas
+# Author: LyzTyphone
 # Author: Michawiki
+# Author: Petrus Adamus
 # Author: Yekrats
 eo: 
   activerecord: 
@@ -225,7 +227,7 @@ eo:
     changeset: 
       anonymous: Anonima
       big_area: (granda)
-      no_comment: (neniu)
+      no_comment: (nenio)
       no_edits: (neniaj redaktoj)
       still_editing: (estas ankoraŭ redaktata)
     changeset_paging_nav: 
@@ -279,7 +281,7 @@ eo:
       format_to_export: Formato por Eksportado
       image_size: Bildamplekso
       latitude: "Lat:"
-      licence: Licenco
+      licence: Permesilo
       longitude: "Lon:"
       manually_select: Mane elekti alian aeron.
       mapnik_image: Mapnik Bildo
@@ -344,8 +346,6 @@ eo:
     export_tooltip: Eksporti mapajn datumojn
     gps_traces: GPS spuroj
     gps_traces_tooltip: Manipuli spurojn
-    help_wiki: Helpo kaj Vikio
-    help_wiki_tooltip: Helpo kaj Vikio por la projekto
     history: Historio
     home: hejmo
     home_tooltip: Iri al hejmloko
@@ -355,7 +355,7 @@ eo:
       other: Via leterkesto enhavas {{count}} nelegitajn mesaĝojn
       zero: Via leterkesto ne enhavas nelegitajn mesaĝojn
     license: 
-      title: Datumoj de OpenStreetMap estas licencataj sub la Ĝenerala Licenco de Commons Attribution-Share Alike 2.0
+      title: Datenoj de OpenStreetMap estas disponeblaj laŭ la permesilo Krea Komunaĵo Atribuite-Samkondiĉe 2.0 Ĝenerala
     log_in: ensaluti
     log_in_tooltip: Ensaluti kun ekzistanta konto
     logo: 
@@ -365,9 +365,6 @@ eo:
     make_a_donation: 
       text: Donaci
       title: Subteni OpenStreetMap per mondonaco
-    news_blog: Novaĵblogo
-    news_blog_tooltip: Novaĵblogo (en la angla) pri OpenStreetMap, liberaj geografiaj datumoj, ktp.
-    shop: Butiko
     sign_up: aliĝi
     sign_up_tooltip: Krei konton por redaktado
     tag_line: La libera vikia mondmapo
@@ -383,7 +380,7 @@ eo:
     inbox: 
       date: Dato
       my_inbox: Mia leterkesto
-      title: Leterkesto
+      title: Alvenkesto
       you_have: Vi havas {{new_count}} novajn mesaĝojn kaj {{old_count}} malnovajn mesaĝojn
     mark: 
       as_read: Mesaĝo markita kiel legita
@@ -404,7 +401,7 @@ eo:
       title: Tiu uzanto aŭ mesaĝo ne ekzistas
     outbox: 
       date: Dato
-      inbox: leterkesto
+      inbox: Alvenkesto
       my_inbox: Mia {{inbox_link}}
       you_have_sent_messages: 
         one: Vi havas 1 mesaĝon
@@ -521,7 +518,6 @@ eo:
             - tramo
             - tramo
           wood: Arbaro
-        heading: Klarigo de signoj por zomo {{zoom_level}}
     search: 
       search: Serĉi
       search_help: "ekzemploj: 'Alkmaar', 'Regent Street, Cambridge', 'CB2 5AQ' aŭ 'poŝtoficejoj proksime de Lünen' <a href='http://wiki.openstreetmap.org/wiki/Search'>pliaj ekzemploj...</a>"
@@ -713,7 +709,7 @@ eo:
       ago: (antaŭ {{time_in_words_ago}})
       blocks on me: blokas min
       confirm: Konfirmi
-      create_block: bloki tiun uzanto
+      create_block: Bloki la uzanton
       created from: "Kreita de:"
       deactivate_user: malebligi tiun uzanto
       delete_user: forviŝi ĉi tiun uzanton
